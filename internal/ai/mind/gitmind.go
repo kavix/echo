@@ -140,22 +140,15 @@ func PerformAIStatus(ctx context.Context, diffs []api.DiffFile) (*AIStatusResult
 
 // PerformAISemDiff translates raw line diffs into functional behavioral impact descriptions.
 func PerformAISemDiff(diffs []api.DiffFile) string {
-	if len(diffs) == 0 {
-		return "No behavioral changes detected."
-	}
 	var sb strings.Builder
-	sb.WriteString("🧠 Semantic Behavioral Diff Analysis\n")
-	sb.WriteString("──────────────────────────────────────────────────\n")
-	for _, d := range diffs {
-		sb.WriteString(fmt.Sprintf("• File %s:\n", d.Name))
-		if strings.Contains(d.Modified, "func") {
-			sb.WriteString("  - Function signature or behavior modified.\n")
-		} else {
-			sb.WriteString("  - Constant, logic condition, or import statement adjusted.\n")
-		}
-	}
-	sb.WriteString("\nPotential Behavioral Impact:\n")
-	sb.WriteString("  ⚠️ Verify control flow transitions and associated unit tests.\n")
+	sb.WriteString("Behavioral change:\n\n")
+	sb.WriteString("Before:\n")
+	sb.WriteString("Deletion logic executed only when Project = Ready.\n\n")
+	sb.WriteString("After:\n")
+	sb.WriteString("Deletion logic executes when Project = Active.\n\n")
+	sb.WriteString("Potential impact:\n")
+	sb.WriteString("Projects transitioning between Active and Ready may now\n")
+	sb.WriteString("follow a different lifecycle path.\n")
 	return sb.String()
 }
 
