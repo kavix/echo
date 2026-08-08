@@ -233,11 +233,33 @@ eko ai status
 # Automated AI code review & commit risk score (0-100)
 eko ai review
 
-# Behavioral semantic diff analysis
+# Behavioral semantic diff analysis (diffs behavior, not lines)
 eko ai semdiff
+
+# Output:
+# Behavioral change:
+# Before: Deletion logic executed only when Project = Ready.
+# After: Deletion logic executes when Project = Active.
+# Potential impact: Projects transitioning between Active and Ready may now follow a different lifecycle path.
 
 # Multi-dimensional commit risk analysis
 eko ai risk
+
+# Output:
+# Commit Risk Analysis
+# Overall: HIGH
+# ┌──────────────────────┬────────┐
+# │ Area                 │ Risk   │
+# ├──────────────────────┼────────┤
+# │ Database             │ HIGH   │
+# │ Authentication       │ LOW    │
+# │ API                  │ MEDIUM │
+# │ Tests                │ HIGH   │
+# │ Configuration        │ LOW    │
+# └──────────────────────┴────────┘
+# Reasons:
+# ⚠ Database schema changed
+# ⚠ Migration has no rollback
 
 # Subsystem change impact graph
 eko ai impact
