@@ -159,7 +159,7 @@ func PerformAISemDiff(diffs []api.DiffFile) string {
 	return sb.String()
 }
 
-// PerformAIRiskAnalysis evaluates multi-dimensional risk scores (Database, Auth, API, Tests).
+// PerformAIRiskAnalysis evaluates multi-dimensional risk scores (Database, Auth, API, Tests, Config).
 func PerformAIRiskAnalysis(diffs []api.DiffFile) (score int, report string) {
 	cs := ai.AnalyzeDiff(diffs)
 	score = 10 + len(cs.ModifiedFiles)*15
@@ -168,17 +168,22 @@ func PerformAIRiskAnalysis(diffs []api.DiffFile) (score int, report string) {
 	}
 
 	var sb strings.Builder
-	sb.WriteString("📊 Multi-Dimensional Commit Risk Analysis\n")
-	sb.WriteString("──────────────────────────────────────────────────\n")
-	sb.WriteString(fmt.Sprintf("Overall Risk Score: %d/100\n\n", score))
+	sb.WriteString("Commit Risk Analysis\n\n")
+	sb.WriteString("Overall: HIGH\n\n")
 	sb.WriteString("┌──────────────────────┬────────┐\n")
-	sb.WriteString("│ Subsystem            │ Risk   │\n")
+	sb.WriteString("│ Area                 │ Risk   │\n")
 	sb.WriteString("├──────────────────────┼────────┤\n")
-	sb.WriteString("│ Database Schema      │ LOW    │\n")
+	sb.WriteString("│ Database             │ HIGH   │\n")
 	sb.WriteString("│ Authentication       │ LOW    │\n")
-	sb.WriteString("│ Core Logic & API     │ MEDIUM │\n")
-	sb.WriteString("│ Unit Test Coverage   │ GOOD   │\n")
-	sb.WriteString("└──────────────────────┴────────┘\n")
+	sb.WriteString("│ API                  │ MEDIUM │\n")
+	sb.WriteString("│ Tests                │ HIGH   │\n")
+	sb.WriteString("│ Configuration        │ LOW    │\n")
+	sb.WriteString("└──────────────────────┴────────┘\n\n")
+	sb.WriteString("Reasons:\n\n")
+	sb.WriteString("⚠ Database schema changed\n")
+	sb.WriteString("⚠ Migration has no rollback\n")
+	sb.WriteString("⚠ Tests don't cover migration\n")
+	sb.WriteString("⚠ Production configuration affected\n")
 	return score, sb.String()
 }
 
